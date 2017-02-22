@@ -200,7 +200,7 @@ def plot_history_alive(model, t, transactions, datetime_col, freq='D', **kwargs)
 
     # Add transactions column
     customer_history['transactions'] = 1
-    customer_history = customer_history.resample(freq, how='sum').reset_index()
+    customer_history = customer_history.resample(freq).sum().reset_index()
 
     # plot alive_path
     path = calculate_alive_path(model, transactions, datetime_col, t, freq)
