@@ -209,7 +209,7 @@ def calculate_alive_path(model, transactions, datetime_col, t, freq='D'):
     customer_history = customer_history.set_index(datetime_col)
     # Add transactions column
     customer_history['transactions'] = 1
-    purchase_history = customer_history.resample(freq, how='sum').fillna(0)['transactions'].values
+    purchase_history = customer_history.resample(freq).sum().fillna(0)['transactions'].values
     extra_columns = t - len(purchase_history)
     customer_history = pd.DataFrame(np.append(purchase_history, [0] * extra_columns), columns=['transactions'])
     # add T column
