@@ -209,12 +209,12 @@ def plot_history_alive(model, t, transactions, datetime_col, freq='D', **kwargs)
 
     # plot buying dates
     payment_dates = customer_history[customer_history['transactions'] >= 1].index
-    plt.vlines(payment_dates.values, ymin=0, ymax=1, colors='r', linestyles='dashed', label='purchases')
+    # plt.vlines(payment_dates.values, ymin=0, ymax=1, colors='r', linestyles='dashed', label='purchases')
 
     plt.ylim(0, 1.0)
     plt.yticks(np.arange(0, 1.1, 0.1))
     plt.xlim(start_date, path_dates[-1])
-    plt.legend(loc=3)
+    # plt.legend(loc=3)
     plt.ylabel('P_alive')
     plt.title('History of P_alive')
 
