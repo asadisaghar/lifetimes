@@ -193,7 +193,9 @@ def plot_history_alive(model, t, transactions, datetime_col, freq='D', **kwargs)
 
     start_date = kwargs.pop('start_date', min(transactions[datetime_col]))
     ax = kwargs.pop('ax', None) or plt.subplot(111)
-
+    label = kwargs.pop('label', None)
+    plot_dates = kwargs.pop('plot_dates', None)
+    
     # Get purchasing history of user
     customer_history = transactions[[datetime_col]].copy()
     customer_history.index = pd.DatetimeIndex(customer_history[datetime_col])
@@ -205,20 +207,21 @@ def plot_history_alive(model, t, transactions, datetime_col, freq='D', **kwargs)
     # plot alive_path
     path = calculate_alive_path(model, transactions, datetime_col, t, freq)
     path_dates = pd.date_range(start=min(transactions[datetime_col]), periods=len(path), freq=freq)
-    plt.plot(path_dates, path, '-', label='P_alive')
+    plt.plot(path_dates, path, '-', label=label)
 
     # plot buying dates
-    payment_dates = customer_history[customer_history['transactions'] >= 1].index
-    # plt.vlines(payment_dates.values, ymin=0, ymax=1, colors='r', linestyles='dashed', label='purchases')
+    if plot_dates:
+        payment_dates = customer_history.loc[customer_history['transactions'] >= 1, datetime_col]
+        plt.vlines(payment_dates.values, ymin=0, ymax=1, colors='r', linestyles='dashed')
 
     plt.ylim(0, 1.0)
     plt.yticks(np.arange(0, 1.1, 0.1))
     plt.xlim(start_date, path_dates[-1])
-    # plt.legend(loc=3)
+    plt.legend().draggable()
     plt.ylabel('P_alive')
     plt.title('History of P_alive')
 
-    return ax
+    return ax, customer_history
 
 
 def forceAspect(ax, aspect=1):
